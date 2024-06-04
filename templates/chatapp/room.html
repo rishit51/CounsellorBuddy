@@ -1,0 +1,55 @@
+{% extends 'layouts/layout-b.html' %}
+{% load static %}
+
+{% block content %}
+
+<wrapper class="block max-w-2xl mx-auto my-10 px-6">
+    <div id="chat_window" class="h-[45rem] flex flex-col bg-gray-800 rounded-2xl shadow-2xl relative p-1">
+        <div class="flex justify-center text-emerald-400 bg-gray-800 p-2 sticky top-0 z-10">
+            <span id="online-count" hx-swap-oob='outerHTML'class="pr-1"></span>online
+        </div>
+        <div id='chat_container' class="overflow-y-auto grow">
+            <ul id='chat_messages' class="flex flex-col justify-end gap-2 p-4">
+
+                {% for message in chat_messages reversed %}
+              {% include 'includes/chat_message.html' %}
+
+                {% endfor %}
+                
+            </ul>
+        </div>
+        <div class="sticky bottom-0 z-10 p-2 bg-gray-800">
+            <div class="flex items-center rounded-xl px-2 py-2">
+                <form id="chat_message_form" 
+                hx-ext="ws"
+                ws-connect="ws://localhost:8000/ws/chat/{{id}}/"
+                ws-send
+                _="on htmx:wsAfterMessage reset() me "
+                class="w-full">
+                   {% csrf_token %}
+                {% for field in form %}
+                    {{field}}
+
+                {% endfor %}
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</wrapper>
+
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+let container=document.querySelector("#chat_container")    
+function scrollToBottom(){
+    container.scrollTop=container.scrollHeight;
+}
+scrollToBottom()
+</script>
+{% endblock %}

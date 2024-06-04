@@ -1,0 +1,19 @@
+{% extends 'layouts/layout-b.html' %}
+
+
+
+{% block content%}
+
+<div class="px-4 grid grid-cols-1 place-items-center justify-center gap-4 md:grid-cols-3  border-2 border-red-500 ">
+
+    {% for i in colleges %}
+
+
+    {% include 'includes/college-cards.html' with i=i %}
+    
+    
+    {% endfor %}
+</div>
+
+
+{% endblock %}

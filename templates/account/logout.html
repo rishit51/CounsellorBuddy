@@ -1,0 +1,39 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+{% block entry %}
+
+
+
+
+{% block content %}
+<div class="p-4">
+
+    <center>
+        <h1 class="text-xl font-bold">{% trans "Sign out" %}</h1>
+    </center>    <center class="mt-10">
+    <p class="text-red-500">{% trans 'Are you sure you want to sign out?' %}</p>
+    {% url 'account_logout' as action_url %}
+
+    {% element form method="post" action=action_url no_visible_fields=True %}
+        {% slot body %}
+            {% csrf_token %}
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}" />
+            {% endif %}
+        {% endslot %}
+        {% slot actions %}
+            <button type="submit" class="text-xl mt-5  p-4 bg-red-500 rounded-lg">
+                {% trans 'Sign Out' %}
+           </button> 
+        {% endslot %}
+    {% endelement %}</center>
+</div>
+    {% endblock content %}
+
+    {% endblock entry %}

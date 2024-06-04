@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+
+{% block layout %}
+
+<div class="flex justify-center h-screen items-center flex-col">
+
+<div class="text-2xl font-bold ">
+    404
+   
+</div>
+ <div>
+    The page you are looking for does not exist. <a href="{% url 'home'%}" class="underlined text-blue-500">Go back to somewhere familiar</a>
+ </div>
+
+
+</div>
+
+
+{% endblock %}

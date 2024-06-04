@@ -1,0 +1,47 @@
+{% load static %}
+<article>
+    <div class="flex items-center mb-4">
+        <img class="w-10 h-10 me-4 rounded-full" src="{% if review.user.role == 'COUNSELLOR' %}
+                                        {{ review.user.counsellor_profile.image.url }}
+                                    {% elif review.user.role == 'STUDENT' %}
+                                   {{ review.user.profile.image.url }}
+                                    {% endif %}"  alt="">
+        <div class="font-medium dark:text-white">
+            <p>{{review.username}} <time datetime="2014-08-16 19:00" class="block text-sm text-gray-500 dark:text-gray-400">Joined on {{review.user.date_joined}}</time></p>
+        </div>
+    </div>
+    <div class="flex items-center mb-1 space-x-1 rtl:space-x-reverse">
+        <svg class="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+        </svg>
+        <p class="ms-2 text-sm font-bold text-gray-900 dark:text-white">{{review.rating}}</p>
+        
+    </div>
+    <p style="white-space:pre-wrap;">
+    {{ review.body | slice:'100' }}
+    {% if review.body|length > 100 %}
+    <a href="" onclick="showComment(event)" data-id="{{review.id}}" class="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read more</a>
+    <div id="review-{{review.id}}" style="display: none;"><p style="white-space:pre-wrap;">{{review.body }}</p>
+        <a href="" onclick="hideComment(event)" data-id="{{review.id}}" class="block mb-5 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Collapse</a>
+    </div>
+    </p>
+    {% endif %}
+    <aside>
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{review.helpful}} people found this helpful</p>
+        <div class="flex items-center mt-3">
+            <a href="#" class="px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Helpful</a>
+            <a href="#" class="ps-4 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 border-gray-200 ms-4 border-s md:mb-0 dark:border-gray-600">Report abuse</a>
+        </div>
+    </aside>
+</article>
+<script>
+    function showComment(e){
+        e.preventDefault();
+        let id=e.target.dataset.id;
+        document.getElementById('review-'+id).style.display='block';
+    }
+    function hideComment(e){
+        e.preventDefault();
+        let id=e.target.dataset.id;
+        document.getElementById('review-'+id).style.display='none';
+    }</script>

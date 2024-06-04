@@ -1,0 +1,134 @@
+{% extends 'layouts/layout-b.html'%}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content%}
+
+
+
+<div id="controls-carousel" class="relative w-full  bg-black" data-carousel="static">
+    <!-- Carousel wrapper -->
+    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+         <!-- Item 1 -->
+        {% for i in college.images.all %}
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="{{i.image.url}}" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        </div>
+       {% endfor %}
+    </div>
+    <!-- Slider controls -->
+    <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+            </svg>
+            <span class="sr-only">Previous</span>
+        </span>
+    </button>
+    <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+            <span class="sr-only">Next</span>
+        </span>
+    </button>
+</div>
+<hr class="my-5 border-black">
+<div class="mt-5 p-4 px-8 ">
+    <h1 class="text-2xl font-bold">{{college.name}}</h1>
+    <div class=" mt-2 flex w-1/2 justify-between">
+        
+        <div>{{college.address}}</div><div>|</div>
+        <div class="flex gap-2">
+            Rating:
+            {{college.rating}}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+              </svg>
+              
+        </div>
+
+    </div>
+    <h2 class="text-lg font-bold mt-5">History:</h2>
+    <div class="mt-5 p-2 border-2 border-black">
+
+        <p class="mb-3 text-black dark:text-gray-400  first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 dark:first-letter:text-gray-100 first-letter:me-3 first-letter:float-start whitespace-pre-line	" >{{college.history}}</p>
+
+        
+    </div>
+    <h2 class="text-lg font-bold mt-5">Counsellors from {{college.name}}:</h2>
+    <ol class="flex gap-2 justify-center flex-wrap mt-5">
+        
+        {% for counsellor in college.counsellors.all %}
+
+        <li>
+
+            {% include 'includes/counsellor-card.html' with counsellor=counsellor %}
+
+        </li>
+         
+        {% endfor %}
+    </ol>
+
+    <div>
+        <a href="{% url 'room' college.id%}" class="underline"><h2>College chatroom</h2></a>
+    </div>
+
+    {% if user.is_authenticated %}
+<div class="bg-green-500 p-4 mt-5 rounded-md">
+    <h2 class="text-xl font-semibold text-white">Write a review</h2>
+    <div class="p-2 bg-white">
+
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="flex flex-col items-center w-4/5 md:items-start md:w-full">
+    <div class=" grid grid-cols-1">
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}  
+  {{ hidden }}  
+{% endfor %}  
+  
+{% for field in form.visible_fields %}  
+  <div >  
+    <label for="{{ field.id_for_label }}" class="block mb-2 text-sm font-bold text-gray-300 dark:text-white"> {{ field.label }} </label>  
+    
+    {% render_field field class+="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %}
+    {% for error in field.errors %}  
+      <span class="help-block">{{ error }}</span>  
+
+
+    
+       
+    {% endfor %}  
+      
+  </div>  
+{% endfor %}
+  
+ 
+     </div>
+     <button type="submit" class="bg-blue-500 mb-5 mt-5 p-4 rounded-lg">  
+        <span class="text-xl font-bold text-white ">Save  </span> 
+</button> 
+</div>
+
+</form>
+    </div>
+
+
+</div>
+    {% endif %}
+<div class="mt-5 ">
+    <h2>Reviews for the College:</h2>
+    <div class="mt-5">
+{% for review in college.reviews.all %}
+
+{% include 'includes/review.html' with review=review %}
+
+{% endfor %}
+
+
+
+    </div>
+
+</div>
+</div>
+{% endblock content %}

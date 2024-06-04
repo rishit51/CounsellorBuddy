@@ -1,0 +1,52 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+{% block entry %}
+
+
+
+
+{% block content %}
+<center>
+
+   <h1 class="text-xl font-bold">
+        {% trans "Sign In" %}
+    </h1>
+
+    <p>
+        {% blocktrans %}If you have not created an account yet, then please
+    <a href="{{ signup_url }}" class="text-blue-500 underline">sign up</a> first.{% endblocktrans %}
+    </p>
+   <div class="text-xl"> {% url 'account_login' as login_url %}</div>
+
+    {% element form form=form method="post" action=login_url tags="entrance,login" %}
+        {% slot body %}
+            {% csrf_token %}
+            <div>
+            {% element fields form=form unlabeled=True %}
+            
+            {% endelement %}</div>
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}" />
+            {% endif %}
+        {% endslot %}
+        {% slot actions %}
+         <button class="mt-4 p-4 rounded-lg text-lg bg-blue-500 text-white border-red-500">
+                {% trans "Sign In" %}
+            </button>
+            
+        {% endslot %}
+    {% endelement %}
+
+    {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+</center>
+{% endblock content %}
+
+{% endblock entry %}
